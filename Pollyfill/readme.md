@@ -231,3 +231,51 @@ console.log(greetAyush("Hello"));  // Output: "Hello, my name is John"
 
 ```
 
+### Polifill for once
+
+```javascript
+
+function once(func, context){
+  let ran
+  return function(){
+    if(func){
+      ran = func.apply(context | this, arguments);
+      func=null 
+    }
+    return ran
+  }
+}
+let hello=once((a,b)=>{console.log("running"+a+b)})
+
+hello(1,2)
+hello(3,4)
+hello(5,7)
+```
+
+
+### Polifill for memoize
+
+```javascript
+function fibo(num){
+  if(num===0 || num===1)return num;
+  return fibo(num-1)+fibo(num-2)
+}
+function memoize(func, context){
+  let dictionary=new Map();
+  return function(arg){
+    if(dictionary.get(arg)){
+      return dictionary.get(arg)
+    }
+    dictionary.set(arg, func.call(context || this, arg))
+    return dictionary.get(arg)
+  }
+}
+let hello=memoize(fibo)
+console.time("1")
+hello(23)
+console.timeEnd("1")
+
+console.time("2")
+hello(23)
+console.timeEnd("2")
+```
